@@ -20,16 +20,18 @@ jobs:
       - name: Install dependencies # Step to install project dependencies
         run: npm install
 
-      - name: Build # Step to build the Vite project
+      - name: Build # Step to build the Vite project, outputting to 'docs'
         run: npm run build
         env:
           # Inject the GEMINI_API_KEY from GitHub Secrets into the Vite build process.
           # Vite variables must be prefixed with VITE_ to be exposed to client-side code.
           VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: Deploy to GitHub Pages # Step to deploy the built files
-        uses: peaceiris/actions-gh-pages@v3 # Using a popular action for GitHub Pages deployment
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }} # Automatically provided GitHub Token
-          publish_dir: ./dist # Specify that the 'dist' folder (containing built files) should be published
-          # The action will create/update a 'gh-pages' branch and push the contents of 'publish_dir' to it.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs # Specify that the 'docs' folder (containing built files) should be published
+          publish_branch: main # Publish directly to the 'main' branch
+          # This action will push the contents of 'publish_dir' to the 'publish_branch'.
+          # GitHub Pages settings will then be configured to serve from 'main' branch and '/docs' folder.
