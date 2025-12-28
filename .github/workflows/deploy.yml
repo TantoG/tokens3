@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # This workflow runs when changes are pushed to the 'main' branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # Use a Linux environment for the job
+    steps:
+      - name: Checkout # Step to checkout your repository code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js # Step to set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Specify the Node.js version your project uses
+
+      - name: Install dependencies # Step to install project dependencies
+        run: npm install
+
+      - name: Build # Step to build the Vite project
+        run: npm run build
+        env:
+          # Inject the GEMINI_API_KEY from GitHub Secrets into the Vite build process.
+          # Vite variables must be prefixed with VITE_ to be exposed to client-side code.
+          VITE_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Deploy to GitHub Pages # Step to deploy the built files
+        uses: peaceiris/actions-gh-pages@v3 # Using a popular action for GitHub Pages deployment
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Automatically provided GitHub Token
+          publish_dir: ./dist # Specify that the 'dist' folder (containing built files) should be published
+          # The action will create/update a 'gh-pages' branch and push the contents of 'publish_dir' to it.
