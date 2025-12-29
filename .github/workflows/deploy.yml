@@ -32,6 +32,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs # Specify that the 'docs' folder (containing built files) should be published
-          publish_branch: main # Publish directly to the 'main' branch
+          publish_branch: gh-pages # Changed to gh-pages for dedicated deployment branch
           # This action will push the contents of 'publish_dir' to the 'publish_branch'.
           # GitHub Pages settings will then be configured to serve from 'main' branch and '/docs' folder.
