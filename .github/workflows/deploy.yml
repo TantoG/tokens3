@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest # Use a Linux environment for the job
+    permissions:
+      contents: write
     steps:
       - name: Checkout # Step to checkout your repository code
         uses: actions/checkout@v3
